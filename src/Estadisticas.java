@@ -1,6 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
+//prueba
 public class Estadisticas {
 
     public static final String ROJO = "\u001B[31m";
