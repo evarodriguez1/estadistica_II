@@ -4,31 +4,35 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("¿Qué tipo de datos ingresará?");
-        System.out.println("1. Discretos (valores enteros)");
-        System.out.println("2. Continuos (valores con decimales)");
 
         while (true) {
-            String opcionTipo = scanner.nextLine();
-            if (opcionTipo.equals("1")) {
-                Estadisticas.tipoDato = "Discretos";
-                break;
-            } else if (opcionTipo.equals("2")) {
-                Estadisticas.tipoDato = "Continuos";
-                break;
-            } else {
-                System.out.println(Estadisticas.ROJO + "Opción inválida. Ingrese 1 o 2." + Estadisticas.RESET);
+
+            // 1) Tipo de cálculo: estadística o distribuciones
+
+            while (true) {
+                System.out.println("Seleccione el tipo de cálculo a realizar");
+                System.out.println("1. Cálculo de estadísticas");
+                System.out.println("1. Cálculo de probabilidad");
+                System.out.print("Seleccione 1 o 2: ");
+                String tipoInput = scanner.nextLine().trim();
+
+                switch (tipoInput) {
+                    case "1":
+                        // Llamar al código viejo (Estadísticas)
+                        break;
+                    case "2":
+                        // Pregunta si serán datos discretos o continuos
+                        // Método con switch:
+                        // case 1: Llama a las distribuciones discretas
+                        // método de opciones de distribuciones discretas (binom, poisson, hipGeo):
+                        // Llamar clase binomial (pedir los datos de binomial)
+                        // Llamar clase poisson (pedir los datos de poisson)
+                        // Llamar clase hipGeo
+                        // case 2: Distribución normal.
+                        // método de distribución normal (pedir datos de normal)
+                }
+
             }
         }
-
-        List<Double> numeros = Estadisticas.ingresarNumeros(scanner);
-        Collections.sort(numeros);
-        System.out.println(Estadisticas.VERDE + "Lista ordenada: " + numeros + Estadisticas.RESET);
-        System.out.println("Cantidad de números: " + numeros.size() + " y es " + (numeros.size() % 2 == 0 ? "par" : "impar"));
-        System.out.println("Tipo de datos: " + Estadisticas.AZUL + Estadisticas.tipoDato + Estadisticas.RESET);
-
-        // Acá se puede enganchar lo nuevo, luego de que termine el menú original o ver como reorganizar el menu
-        //porque viene enganchado de u metodo mostrar menu cuac
-        Estadisticas.mostrarMenu(numeros, scanner);
     }
 }

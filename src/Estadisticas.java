@@ -1,7 +1,6 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-//prueba
 public class Estadisticas {
 
     public static final String ROJO = "\u001B[31m";
@@ -10,6 +9,35 @@ public class Estadisticas {
     public static final String RESET = "\u001B[0m";
 
     public static String tipoDato = "";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("¿Qué tipo de datos ingresará?");
+        System.out.println("1. Discretos (valores enteros)");
+        System.out.println("2. Continuos (valores con decimales)");
+
+        while (true) {
+            String opcionTipo = scanner.nextLine();
+            if (opcionTipo.equals("1")) {
+                tipoDato = "Discretos";
+                break;
+            } else if (opcionTipo.equals("2")) {
+                tipoDato = "Continuos";
+                break;
+            } else {
+                System.out.println(ROJO + "Opción inválida. Ingrese 1 o 2." + RESET);
+            }
+        }
+
+        List<Double> numeros = ingresarNumeros(scanner);
+        Collections.sort(numeros);
+        System.out.println(VERDE + "Lista ordenada: " + numeros + RESET);
+        System.out.println("Cantidad de números es de " + numeros.size() + " y es " + (numeros.size() % 2 == 0 ? "par" : "impar"));
+        System.out.println("Tipo de datos: " + AZUL + tipoDato + RESET);
+
+        mostrarMenu(numeros, scanner);
+    }
 
     public static List<Double> ingresarNumeros(Scanner scanner) {
         List<Double> numeros = new ArrayList<>();
@@ -176,17 +204,3 @@ public class Estadisticas {
         return (desviacionEstandar(nums) / media(nums)) * 100;
     }
 }
-
-
-// Separacion de temas
-// Marti:
-// Binomial
-// Poisson
-
-// Eva:
-// Hipergeométrica
-// Todo y salir, salir
-
-// Luca:
-// Distribución normal
-// Coeficiente Curtois
