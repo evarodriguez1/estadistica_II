@@ -177,3 +177,14 @@ public class Estadisticas {
     }
 }
 
+// Marti:
+// Binomial
+// Poisson
+
+// Eva:
+// Hipergeométrica
+// Todo y salir, salir
+
+// Luca:
+// Distribución normal
+// Coeficiente Curtois
