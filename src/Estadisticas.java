@@ -177,6 +177,8 @@ public class Estadisticas {
     }
 }
 
+
+// Separacion de temas
 // Marti:
 // Binomial
 // Poisson
