@@ -8,7 +8,7 @@ public class Main {
         while (true) {
 
             // 1) Tipo de cálculo: estadística o distribuciones
-
+            //
             while (true) {
                 System.out.println("Seleccione el tipo de cálculo a realizar");
                 System.out.println("1. Cálculo de estadísticas");
