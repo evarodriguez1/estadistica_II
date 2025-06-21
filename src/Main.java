@@ -61,8 +61,8 @@ public class Main {
                                 Binomial.distribucionBinomial();
                                 break;
                             case "2":
-                                System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
-                                //Poisson.calcular(); poneleeee
+                                System.out.println("\n");
+                                Poisson.distribucionPoisson();
                                 break;
                             case "3":
                                 System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj

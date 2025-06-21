@@ -90,6 +90,7 @@ public class Binomial {
         //no puedo usar la barra con biginterger, por eso utilizo divide
     }
 
+    //Fórmula de probabilidad Binomial:  P(x; n, p) = C(n, x) * p^x * (1 - p)^(n - x)
     public static double probabilidadBinomial(int n, int k, double p) {
         BigInteger combinatoria = combinatorio(n, k);
         // Convierto combinatoria a double para no romper el cálculo
