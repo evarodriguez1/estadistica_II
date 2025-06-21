@@ -10,7 +10,7 @@ public class Estadisticas {
 
     public static String tipoDato = "";
 
-    public static void main(String[] args) {
+    public static void menuEstadistica() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("¿Qué tipo de datos ingresará?");

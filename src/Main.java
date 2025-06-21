@@ -1,39 +1,84 @@
-import java.util.*;
-
-//rama pusheada
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
 
+        final String ROJO = "\u001B[31m";
+        final String VERDE = "\u001B[32m";
+        final String AZUL = "\u001B[34m";
+        final String RESET = "\u001B[0m";
+
+        System.out.println("=====================================");
+        System.out.println(AZUL + "  Programa: Cálculo de Estadísticas         ");
+        System.out.println("           y Probabilidades                 " + RESET);
+        System.out.println("=====================================\n");
 
         while (true) {
+            System.out.println("Seleccione el tipo de cálculo a realizar");
+            System.out.println("1. Cálculo de estadísticas");
+            System.out.println("2. Cálculo de probabilidad");
+            System.out.print("Seleccione 1 o 2: ");
+            String tipoInput = scanner.nextLine().trim();
 
-            // 1) Tipo de cálculo: estadística o distribuciones
+            switch (tipoInput) {
+                case "1":
+                    // Llamada a la clase Estadisticas
+                    Estadisticas.menuEstadistica();
+                    break;
 
-            while (true) {
-                System.out.println("Seleccione el tipo de cálculo a realizar");
-                System.out.println("1. Cálculo de estadísticas");
-                System.out.println("1. Cálculo de probabilidad");
-                System.out.print("Seleccione 1 o 2: ");
-                String tipoInput = scanner.nextLine().trim();
+                case "2":
+                    String tipoDato = "";
+                    while (true) {
+                        System.out.println("\n¿Qué tipo de datos ingresará?");
+                        System.out.println("1. Discretos (valores enteros)");
+                        System.out.println("2. Continuos (valores con decimales)");
+                        String opcionTipo = scanner.nextLine();
+                        if (opcionTipo.equals("1")) {
+                            tipoDato = "Discretos";
+                            break;
+                        } else if (opcionTipo.equals("2")) {
+                            tipoDato = "Continuos";
+                            break;
+                        } else {
+                            System.out.println(ROJO + "Opción inválida. Ingrese 1 o 2." + RESET);
+                        }
+                    }
 
-                switch (tipoInput) {
-                    case "1":
-                        // Llamar al código viejo (Estadísticas)
-                        break;
-                    case "2":
-                        // Pregunta si serán datos discretos o continuos
-                        // Método con switch:
-                        // case 1: Llama a las distribuciones discretas
-                        // método de opciones de distribuciones discretas (binom, poisson, hipGeo):
-                        // Llamar clase binomial (pedir los datos de binomial)
-                        // Llamar clase poisson (pedir los datos de poisson)
-                        // Llamar clase hipGeo
-                        // case 2: Distribución normal.
-                        // método de distribución normal (pedir datos de normal)
-                }
+                    if (tipoDato.equals("Discretos")) {
+                        System.out.println("\nSeleccione la distribución a calcular:");
+                        System.out.println("1. Distribución Binomial");
+                        System.out.println("2. Distribución de Poisson");
+                        System.out.println("3. Distribución Hipergeométrica");
+                        System.out.print("Opción: ");
+                        String distribucion = scanner.nextLine();
 
+                        switch (distribucion) {
+                            case "1":
+                                System.out.println("\n");
+                                //se me rompe a la m con números grandes :(
+                                Binomial.distribucionBinomial();
+                                break;
+                            case "2":
+                                System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
+                                //Poisson.calcular(); poneleeee
+                                break;
+                            case "3":
+                                System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
+                                //Hipergeometrica.calcular(); poneeeeleeee
+                                break;
+                            default:
+                                System.out.println(ROJO + "Opción inválida." + RESET);
+                        }
+                    } else if (tipoDato.equals("Continuos")) {
+                        System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
+                        //Gaussiana.calcular(); poneeeeleeeeee
+                    }
+                    break;
+
+                default:
+                    System.out.println(ROJO + "Ingrese una opción válida (1 o 2)" + RESET);
             }
         }
     }
