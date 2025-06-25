@@ -126,9 +126,9 @@ public class Estadisticas {
         System.out.println("Coeficiente de variación: " + coeficienteVariacion(numeros) + "%");
 
         // Mostrar por pantalla la implementación del coeficiente de Curtois
-        double g = coeficienteCurtois(numeros);
+        double g = coeficienteCurtosis(numeros);
         String interpretacion = g < 0 ? "Platicúrtica" : g == 0 ? "Mesocúrtica" : "Leptocúrtica";
-        System.out.printf("Coeficiente de Curtois: %.5f → %s%n", g, interpretacion);
+        System.out.printf("Coeficiente de Curtosis: %.5f → %s%n", g, interpretacion);
     }
 
     public static void mostrarFrecuencias(List<Double> numeros) {
@@ -209,8 +209,8 @@ public class Estadisticas {
         return (desviacionEstandar(nums) / media(nums)) * 100;
     }
 
-    // Nuevo método para calcular el coeficiente de Curtois
-    public static double coeficienteCurtois(List<Double> numeros) {
+    // Nuevo método para calcular el coeficiente de Curtosis
+    public static double coeficienteCurtosis(List<Double> numeros) {
         int n = numeros.size();
         double media = media(numeros);
         double s = desviacionEstandar(numeros);
