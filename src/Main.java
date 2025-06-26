@@ -65,8 +65,7 @@ public class Main {
                                 Poisson.distribucionPoisson();
                                 break;
                             case "3":
-                                System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
-                                //Hipergeometrica.calcular(); poneeeeleeee
+                                Hipergeometrica.distribucionHipergeometrica();
                                 break;
                             default:
                                 System.out.println(ROJO + "Opción inválida." + RESET);
