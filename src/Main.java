@@ -66,14 +66,14 @@ public class Main {
                                 break;
                             case "3":
                                 System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
-                                //Hipergeometrica.calcular(); poneeeeleeee
+                                //Hipergeometrica.distribucionHipergeometrica(); poneeeeleeee
                                 break;
                             default:
                                 System.out.println(ROJO + "Opción inválida." + RESET);
                         }
                     } else if (tipoDato.equals("Continuos")) {
                         System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
-                        //Gaussiana.calcular(); poneeeeleeeeee
+                        //Gaussiana.distribucionGaussiana(); poneeeeleeeeee
                     }
                     break;
 
