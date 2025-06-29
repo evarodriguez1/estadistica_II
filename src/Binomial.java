@@ -8,7 +8,7 @@ public class Binomial {
     static final String AZUL = "\u001B[34m";
     static final String RESET = "\u001B[0m";
 
-    public static void distribucionBinomial(){
+    public static void distribucionBinomial() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -28,18 +28,15 @@ public class Binomial {
 
             } catch (NumberFormatException e) {
                 System.out.println(ROJO + "Debe ingresar un número entero válido." + RESET);
-                scanner.nextLine();
             }
         }
 
-        //¿agrego la funcionalidad para que calcule la probabilidad si es que la persona no la sabe o no tiene ganas?
         double probExitos = 0;
         while (true) {
             try {
-                System.out.print("\nIngrese la probabilidad de " + VERDE + " éxito " + RESET + " (entre 0 y 1): ");
+                System.out.print("\nIngrese la probabilidad de " + VERDE + "éxito" + RESET + " (entre 0 y 1): ");
                 probExitos = scanner.nextDouble();
                 scanner.nextLine();
-
                 if (probExitos >= 0 && probExitos <= 1) {
                     break;
                 } else {
@@ -51,28 +48,73 @@ public class Binomial {
             }
         }
 
-        int casosFav;
+        System.out.println("\nSeleccione el tipo de cálculo que desea realizar:");
+        System.out.println("1. Probabilidad exacta (P(X = k))");
+        System.out.println("2. Probabilidad acumulada hasta un valor máximo (P(X ≤ k))");
+        System.out.println("3. Probabilidad desde un mínimo (P(X ≥ k))");
+        System.out.println("4. Probabilidad entre un rango (P(a ≤ X ≤ b))");
+
+        int opcion;
         while (true) {
-
-            try{
-                System.out.println("\nIngrese la cantidad de veces que espera que un éxito ocurra");
-                casosFav = Integer.parseInt(scanner.nextLine().trim());
-                if (casosFav <= ensayos && casosFav>=0) {
-                    break;
-                } else {
-                    System.out.println(ROJO + "El número debe ser un número entero > o = a cero y < o = a la cantidad total de casos." + RESET);
-                }
-            }catch(NumberFormatException e){
-                System.out.println(ROJO + "Debe ingresar un número entero válido." + RESET);
-                scanner.nextLine();
+            try {
+                System.out.print("Ingrese una opción (1 a 4): ");
+                opcion = Integer.parseInt(scanner.nextLine().trim());
+                if (opcion >= 1 && opcion <= 4) break;
+                else System.out.println(ROJO + "Debe ingresar un número entre 1 y 4." + RESET);
+            } catch (Exception e) {
+                System.out.println(ROJO + "Entrada inválida. Intente de nuevo." + RESET);
             }
-
         }
 
-        double resultado = probabilidadBinomial(ensayos, casosFav, probExitos);
-        System.out.printf(AZUL + "\nLa probabilidad de obtener exactamente %d éxitos en %d ensayos es: %.5f\n" + RESET,
-                casosFav, ensayos, resultado);
-        scanner.nextLine();
+        int desde = 0, hasta = 0;
+
+        try {
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingrese el valor de k: ");
+                    desde = hasta = Integer.parseInt(scanner.nextLine().trim());
+                    break;
+                case 2:
+                    System.out.print("Ingrese el valor máximo k: ");
+                    hasta = Integer.parseInt(scanner.nextLine().trim());
+                    desde = 0;
+                    break;
+                case 3:
+                    System.out.print("Ingrese el valor mínimo k: ");
+                    desde = Integer.parseInt(scanner.nextLine().trim());
+                    hasta = ensayos;
+                    break;
+                case 4:
+                    System.out.print("Ingrese el valor mínimo a: ");
+                    desde = Integer.parseInt(scanner.nextLine().trim());
+                    System.out.print("Ingrese el valor máximo b: ");
+                    hasta = Integer.parseInt(scanner.nextLine().trim());
+                    break;
+            }
+
+            if (desde < 0 || hasta > ensayos || desde > hasta) {
+                System.out.println(ROJO + "Rango inválido. Verifique los valores ingresados." + RESET);
+                return;
+            }
+
+        } catch (NumberFormatException e) {
+            System.out.println(ROJO + "Debe ingresar un número entero válido." + RESET);
+            return;
+        }
+
+        // Cálculo acumulado
+        double total = 0;
+        for (int x = desde; x <= hasta; x++) {
+            total += probabilidadBinomial(ensayos, x, probExitos);
+        }
+
+        System.out.printf(AZUL + "\nLa probabilidad de que X esté entre %d y %d es: %.5f\n" + RESET,
+                desde, hasta, total);
+
+        double esperanza = ensayos * probExitos;
+        double varianza = ensayos * probExitos * (1 - probExitos);
+        System.out.printf(AZUL + "Esperanza (media): %.4f\n" + RESET, esperanza);
+        System.out.printf(AZUL + "Varianza: %.4f\n" + RESET, varianza);
     }
 
     public static BigInteger factorial(int num) {
@@ -87,13 +129,10 @@ public class Binomial {
         BigInteger numerador = factorial(n);
         BigInteger denominador = factorial(k).multiply(factorial(n - k));
         return numerador.divide(denominador);
-        //no puedo usar la barra con biginterger, por eso utilizo divide
     }
 
-    //Fórmula de probabilidad Binomial:  P(x; n, p) = C(n, x) * p^x * (1 - p)^(n - x)
     public static double probabilidadBinomial(int n, int k, double p) {
         BigInteger combinatoria = combinatorio(n, k);
-        // Convierto combinatoria a double para no romper el cálculo
         return combinatoria.doubleValue() * Math.pow(p, k) * Math.pow(1 - p, n - k);
     }
 }
