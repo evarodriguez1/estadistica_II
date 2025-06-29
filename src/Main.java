@@ -51,9 +51,9 @@ public class Main {
         boolean seguirEnProbabilidad = true;
 
         while (seguirEnProbabilidad) {
-            System.out.println("\n¿Qué tipo de datos desea ingresar?");
-            System.out.println("1. Discretos (valores enteros)");
-            System.out.println("2. Continuos (valores con decimales)");
+            System.out.println("\n¿Qué tipo de distribución desea utilizar?");
+            System.out.println("1. Distribución discreta (Binomial, Poisson o Hipergeométrica) ");
+            System.out.println("2. Distribución continua (Gaussiana)");
             System.out.println("3. Volver al menú principal");
             System.out.print("Opción: ");
             String opcionTipo = scanner.nextLine().trim();
