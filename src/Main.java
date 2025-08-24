@@ -16,68 +16,128 @@ public class Main {
         System.out.println("=====================================\n");
 
         while (true) {
-            System.out.println("Seleccione el tipo de cálculo a realizar");
+            System.out.println("\nSeleccione el tipo de cálculo a realizar:");
             System.out.println("1. Cálculo de estadísticas");
             System.out.println("2. Cálculo de probabilidad");
-            System.out.print("Seleccione 1 o 2: ");
+            System.out.println("3. Salir del programa");
+            System.out.print("Seleccione una opción (1, 2 o 3): ");
             String tipoInput = scanner.nextLine().trim();
 
             switch (tipoInput) {
                 case "1":
-                    // Llamada a la clase Estadisticas
                     Estadisticas.menuEstadistica();
                     break;
 
                 case "2":
-                    String tipoDato = "";
-                    while (true) {
-                        System.out.println("\n¿Qué tipo de datos ingresará?");
-                        System.out.println("1. Discretos (valores enteros)");
-                        System.out.println("2. Continuos (valores con decimales)");
-                        String opcionTipo = scanner.nextLine();
-                        if (opcionTipo.equals("1")) {
-                            tipoDato = "Discretos";
-                            break;
-                        } else if (opcionTipo.equals("2")) {
-                            tipoDato = "Continuos";
-                            break;
-                        } else {
-                            System.out.println(ROJO + "Opción inválida. Ingrese 1 o 2." + RESET);
-                        }
-                    }
-
-                    if (tipoDato.equals("Discretos")) {
-                        System.out.println("\nSeleccione la distribución a calcular:");
-                        System.out.println("1. Distribución Binomial");
-                        System.out.println("2. Distribución de Poisson");
-                        System.out.println("3. Distribución Hipergeométrica");
-                        System.out.print("Opción: ");
-                        String distribucion = scanner.nextLine();
-
-                        switch (distribucion) {
-                            case "1":
-                                System.out.println("\n");
-                                //se me rompe a la m con números grandes :(
-                                Binomial.distribucionBinomial();
-                                break;
-                            case "2":
-                                System.out.println("\n");
-                                Poisson.distribucionPoisson();
-                                break;
-                            case "3":
-                                System.out.println("jelou funcion no implementada"); //sacale esto a la m cuando lo tengas jsjsjsj
-                                //Hipergeometrica.calcular(); poneeeeleeee
-                                break;
-                            default:
-                                System.out.println(ROJO + "Opción inválida." + RESET);
-                        }
-                    } else if (tipoDato.equals("Continuos")) {
-                        Gaussiana.distribucionNormal();
-                    }
+                    seleccionarProbabilidad(scanner);
                     break;
 
+                case "3":
+                    System.out.println(VERDE + "Gracias por usar el programa. ¡Hasta luego!" + RESET);
+                    return;
+
                 default:
-                    System.out.println(ROJO + "Ingrese una opción válida (1 o 2)" + RESET);
+                    System.out.println(ROJO + "Ingrese una opción válida (1, 2 o 3)" + RESET);
+            }
+        }
+    }
+
+    public static void seleccionarProbabilidad(Scanner scanner) {
+        final String ROJO = "\u001B[31m";
+        final String VERDE = "\u001B[32m";
+        final String AZUL = "\u001B[34m";
+        final String RESET = "\u001B[0m";
+
+        boolean seguirEnProbabilidad = true;
+
+        while (seguirEnProbabilidad) {
+            System.out.println("\n¿Qué tipo de distribución desea utilizar?");
+            System.out.println("1. Distribución discreta (Binomial, Poisson o Hipergeométrica) ");
+            System.out.println("2. Distribución continua (Gaussiana)");
+            System.out.println("3. Volver al menú principal");
+            System.out.print("Opción: ");
+            String opcionTipo = scanner.nextLine().trim();
+
+            if (opcionTipo.equals("1")) {
+                boolean seguirEnDiscretos = true;
+                while (seguirEnDiscretos) {
+                    System.out.println("\nSeleccione la distribución discreta:");
+                    System.out.println("1. Distribución Binomial");
+                    System.out.println("2. Distribución de Poisson");
+                    System.out.println("3. Distribución Hipergeométrica");
+                    System.out.println("4. Volver al paso anterior");
+                    System.out.print("Opción: ");
+                    String distribucion = scanner.nextLine().trim();
+
+                    switch (distribucion) {
+                        case "1":
+                            repetirCalculo(scanner, "binomial");
+                            break;
+                        case "2":
+                            repetirCalculo(scanner, "poisson");
+                            break;
+                        case "3":
+                            repetirCalculo(scanner, "hipergeometrica");
+                            break;
+                        case "4":
+                            seguirEnDiscretos = false;
+                            break;
+                        default:
+                            System.out.println(ROJO + "Opción inválida. Ingrese 1 a 4." + RESET);
+                    }
+                }
+            } else if (opcionTipo.equals("2")) {
+                boolean seguirEnContinuos = true;
+                while (seguirEnContinuos) {
+                    System.out.println("\nSeleccione la distribución continua:");
+                    System.out.println("1. Distribución Normal");
+                    System.out.println("2. Volver al paso anterior");
+                    System.out.print("Opción: ");
+                    String opcionContinua = scanner.nextLine().trim();
+
+                    switch (opcionContinua) {
+                        case "1":
+                            repetirCalculo(scanner, "normal");
+                            break;
+                        case "2":
+                            seguirEnContinuos = false;
+                            break;
+                        default:
+                            System.out.println(ROJO + "Opción inválida. Ingrese 1 o 2." + RESET);
+                    }
+                }
+            } else if (opcionTipo.equals("3")) {
+                seguirEnProbabilidad = false;
+            } else {
+                System.out.println(ROJO + "Opción inválida. Ingrese 1, 2 o 3." + RESET);
+            }
+        }
+    }
+
+    public static void repetirCalculo(Scanner scanner, String tipo) {
+        final String VERDE = "\u001B[32m";
+        final String RESET = "\u001B[0m";
+
+        while (true) {
+            switch (tipo) {
+                case "binomial":
+                    Binomial.distribucionBinomial();
+                    break;
+                case "poisson":
+                    Poisson.distribucionPoisson();
+                    break;
+                case "hipergeometrica":
+                    Hipergeometrica.distribucionHipergeometrica();
+                    break;
+                case "normal":
+                    Gaussiana.distribucionNormal();
+                    break;
+            }
+
+            System.out.print(VERDE + "\n¿Desea realizar otro cálculo con la misma distribución? (s/n): " + RESET);
+            String respuesta = scanner.nextLine().trim().toLowerCase();
+            if (!respuesta.equals("s")) {
+                break;
             }
         }
     }
