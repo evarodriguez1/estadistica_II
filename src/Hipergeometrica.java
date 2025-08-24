@@ -11,109 +11,143 @@ public class Hipergeometrica {
     public static void distribucionHipergeometrica() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Usted eligió trabajar con la" + AZUL + " distribución hipergeométrica.\n" + RESET +
-                "Esta se usa cuando se saca una muestra sin reposición de una población finita que contiene elementos exitosos y fallidos.\n");
+        // --- MENSAJE INICIAL ---
+        System.out.println("--- " + AZUL + "Cálculo de Probabilidad Hipergeométrica" + RESET + " ---\n" +
+                "Esta herramienta es ideal para calcular probabilidades cuando se extrae una muestra de un grupo" + ROJO + " y no se devuelven " + RESET + "los elementos sacados.\n" +
+                "(Ej: Sacar 5 cartas de una baraja, seleccionar 10 personas de un grupo para un comité).");
 
+        System.out.println("\n--- Define tu Escenario ---");
         int N;
         while (true) {
-            N = pedirEntero(scanner, "Ingrese el tamaño total de la población (N): ");
+            N = pedirEntero(scanner, "1. ¿Cuántos elementos hay en el grupo total? (N > 0): ");
             if (N > 0) break;
-            System.out.println(ROJO + "❌ N debe ser mayor a cero." + RESET);
+            System.out.println(ROJO + "El tamaño total del grupo (N) debe ser mayor que cero." + RESET);
         }
 
         int K;
         while (true) {
-            K = pedirEntero(scanner, "Ingrese la cantidad total de elementos exitosos en la población (K): ");
-            if (K <= N) break;
-            System.out.println(ROJO + "❌ K no puede ser mayor que N." + RESET);
+            K = pedirEntero(scanner, "2. De ese total, ¿cuántos son considerados 'éxitos'? (K ≤ N) (Ej: N° de ases en la baraja): ");
+            if (K >= 0 && K <= N) break; // K puede ser 0
+            System.out.println(ROJO + "El número de 'éxitos' (K) no puede ser negativo ni mayor que el total del grupo (N)." + RESET);
         }
 
         int n;
         while (true) {
-            n = pedirEntero(scanner, "Ingrese el tamaño de la muestra tomada sin reemplazo (n): ");
-            if (n <= N) break;
-            System.out.println(ROJO + "❌ n no puede ser mayor que N." + RESET);
+            n = pedirEntero(scanner, "3. ¿Cuántos elementos vas a extraer del grupo (muestra)? (n ≤ N): ");
+            if (n >= 0 && n <= N) break; // n puede ser 0
+            System.out.println(ROJO + "El tamaño de la muestra (n) no puede ser negativo ni mayor que el total del grupo (N)." + RESET);
         }
 
-        //opciones de rango
-        System.out.println("\nSeleccione el tipo de cálculo que desea realizar:");
-        System.out.println("1. Probabilidad exacta (P(X = k))");
-        System.out.println("2. Probabilidad acumulada hasta un valor máximo (P(X ≤ k))");
-        System.out.println("3. Probabilidad desde un mínimo (P(X ≥ k))");
-        System.out.println("4. Probabilidad entre un rango (P(a ≤ X ≤ b))");
+        // --- MENÚ DE OPCIONES ---
+        System.out.println("\n4. Selecciona el tipo de cálculo a realizar:");
+        System.out.println("   1. Probabilidad de obtener un número" + VERDE + " exacto " + RESET + "de éxitos, tal que P(X = k).");
+        System.out.println("   2. Probabilidad de obtener" + VERDE + " como máximo " + RESET + "un número de éxitos, tal que P(X ≤ k) ('a lo sumo...').");
+        System.out.println("   3. Probabilidad de obtener" + VERDE + " como mínimo " + RESET + "un número de éxitos, tal que P(X ≥ k) ('por lo menos...').");
+        System.out.println("   4. Probabilidad de obtener un número de éxitos" + VERDE + " dentro de un rango " + RESET + ", tal que P(a ≤ X ≤ b).");
+
 
         int opcion;
         while (true) {
-            opcion = pedirEntero(scanner, "Ingrese una opción (1 a 4): ");
+            opcion = pedirEntero(scanner, "Elige una opción (1-4): ");
             if (opcion >= 1 && opcion <= 4) break;
-            System.out.println(ROJO + "Debe ingresar un número entre 1 y 4." + RESET);
+            System.out.println(ROJO + "Por favor, ingresa un número del 1 al 4." + RESET);
         }
 
         int desde = 0, hasta = 0;
 
-        try {
-            switch (opcion) {
-                case 1: // chance de conseguir exactamente x éxitos
-                    int x = pedirEntero(scanner, "Ingrese el valor de x (éxitos deseados): ");
-                    desde = hasta = x;
-                    break;
-                case 2: // chance de conseguir como mucho x éxitos
-                    hasta = pedirEntero(scanner, "Ingrese el valor máximo de éxitos (k): ");
-                    desde = 0;
-                    break;
-                case 3: // chance de conseguir como mínimo x éxitos
-                    desde = pedirEntero(scanner, "Ingrese el valor mínimo de éxitos (k): ");
-                    hasta = Math.min(n, K); // no puede haber más éxitos que los disponibles
-                    break;
-                case 4: // chances entre dos valores (x) de éxitos
-                    desde = pedirEntero(scanner, "Ingrese el valor mínimo de éxitos (a): ");
-                    hasta = pedirEntero(scanner, "Ingrese el valor máximo de éxitos (b): ");
-                    break;
-            }
+        switch (opcion) {
+            case 1:
+                int k_exacto = pedirEntero(scanner, "   ↳ Ingresa el número exacto de éxitos que buscas en tu muestra (k): ");
+                desde = hasta = k_exacto;
+                break;
+            case 2:
+                hasta = pedirEntero(scanner, "   ↳ Ingresa el número máximo de éxitos posibles (k): ");
+                desde = 0; // El mínimo posible de éxitos es siempre 0
+                break;
+            case 3:
+                desde = pedirEntero(scanner, "   ↳ Ingresa el número mínimo de éxitos deseados (k): ");
+                hasta = Math.min(n, K); // El máximo de éxitos posible es el tamaño de la muestra o el total de éxitos disponibles
+                break;
+            case 4:
+                desde = pedirEntero(scanner, "   ↳ Valor mínimo del rango de éxitos (a): ");
+                hasta = pedirEntero(scanner, "   ↳ Valor máximo del rango de éxitos (b): ");
+                break;
+        }
 
-            if (desde < 0 || hasta > n || desde > hasta) {
-                System.out.println(ROJO + "❌ Rango inválido. Verifique los valores ingresados." + RESET);
-                return;
-            }
-
-        } catch (NumberFormatException e) {
-            System.out.println(ROJO + "❌ Entrada inválida. Debe ingresar un número entero." + RESET);
+        if (desde > hasta) {
+            System.out.println(ROJO + "Rango inválido. El valor mínimo (a) no puede ser mayor que el máximo (b)." + RESET);
+            return;
+        }
+        if (hasta > n) {
+            System.out.println(ROJO + "Rango inválido. No puedes obtener más éxitos ("+hasta+") que el tamaño de tu muestra ("+n+")." + RESET);
+            return;
+        }
+        if (hasta > K) {
+            System.out.println(ROJO + "Rango inválido. No puedes obtener más éxitos ("+hasta+") que el total de éxitos disponibles en el grupo ("+K+")." + RESET);
             return;
         }
 
+
         double total = 0;
-        for (int i = desde; i <= hasta; i++) {
-            if (i <= K && (n - i) <= (N - K)) {
-                total += calcularProbabilidadHipergeometrica(N, K, n, i);
+        // El bucle calcula la probabilidad para cada k en el rango [desde, hasta]
+        for (int k = desde; k <= hasta; k++) {
+            // Condición de validez para el combinatorio:
+            // k no puede ser > K (no puedes sacar más éxitos de los que hay)
+            // n-k no puede ser > N-K (no puedes sacar más "fracasos" de los que hay)
+            if (k <= K && (n - k) <= (N - K)) {
+                total += calcularProbabilidadHipergeometrica(N, K, n, k);
             }
         }
 
-        System.out.printf(VERDE + "\nLa probabilidad de que X esté entre %d y %d es: %.5f\n" + RESET, desde, hasta, total);
-        System.out.printf(VERDE + "Eso representa un %.2f%% de probabilidad.\n" + RESET, total * 100);
+        System.out.println("\n--- " + AZUL + "Resultado" + RESET + " ---");
+
+        String textoResultado = "";
+        switch(opcion) {
+            case 1:
+                textoResultado = String.format("La probabilidad de obtener %sexactamente %d%s éxitos en la muestra es:", VERDE, desde, AZUL);
+                break;
+            case 2:
+                textoResultado = String.format("La probabilidad de obtener %scomo máximo %d%s éxitos en la muestra es:", VERDE, hasta, AZUL);
+                break;
+            case 3:
+                textoResultado = String.format("La probabilidad de obtener %scomo mínimo %d%s éxitos en la muestra es:", VERDE, desde, AZUL);
+                break;
+            case 4:
+                textoResultado = String.format("La probabilidad de obtener %sentre %d y %d%s éxitos en la muestra es:", VERDE, desde, hasta, AZUL);
+                break;
+        }
+
+        System.out.printf(AZUL + "%s %.5f\n" + RESET, textoResultado, total);
+        System.out.printf(AZUL + "↳ Esto representa un %.2f%% de probabilidad.\n" + RESET, total * 100);
     }
 
     private static int pedirEntero(Scanner scanner, String mensaje) {
         while (true) {
             try {
                 System.out.print(mensaje);
-                int valor = Integer.parseInt(scanner.nextLine().trim());
-                if (valor >= 0) return valor;
-                System.out.println(ROJO + "Ingrese un entero mayor o igual a cero." + RESET);
+                return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println(ROJO + "Debe ingresar un número entero válido." + RESET);
+                System.out.println(ROJO + "Entrada inválida. Debes ingresar un número entero." + RESET);
             }
         }
     }
 
     public static double calcularProbabilidadHipergeometrica(int N, int K, int n, int x) {
-        BigInteger exitos = combinatorio(K, x);
-        BigInteger fracasos = combinatorio(N - K, n - x);
-        BigInteger total = combinatorio(N, n);
+        // La fórmula es: C(K, x) * C(N-K, n-x) / C(N, n)
+        BigInteger exitos_combinatorio = combinatorio(K, x);
+        BigInteger fracasos_combinatorio = combinatorio(N - K, n - x);
+        BigInteger total_combinatorio = combinatorio(N, n);
 
-        return exitos.multiply(fracasos).doubleValue() / total.doubleValue();
+        // Si el total de combinaciones es cero, la probabilidad es cero.
+        if (total_combinatorio.equals(BigInteger.ZERO)) {
+            return 0.0;
+        }
+
+        return exitos_combinatorio.multiply(fracasos_combinatorio).doubleValue() / total_combinatorio.doubleValue();
     }
 
     public static BigInteger factorial(int num) {
+        if (num < 0) return BigInteger.ZERO;
         BigInteger resultado = BigInteger.ONE;
         for (int i = 2; i <= num; i++) {
             resultado = resultado.multiply(BigInteger.valueOf(i));
@@ -122,7 +156,9 @@ public class Hipergeometrica {
     }
 
     public static BigInteger combinatorio(int n, int k) {
-        if (k > n) return BigInteger.ZERO;
+        if (k < 0 || k > n) {
+            return BigInteger.ZERO; // Condición lógica: es imposible elegir k de n si k > n o k < 0.
+        }
         BigInteger numerador = factorial(n);
         BigInteger denominador = factorial(k).multiply(factorial(n - k));
         return numerador.divide(denominador);

@@ -1,143 +1,109 @@
 import java.util.Scanner;
 
 public class Main {
+    // --- Constantes de color definidas a nivel de clase para ser usadas en todos los métodos ---
+    static final String ROJO = "\u001B[31m";
+    static final String VERDE = "\u001B[32m";
+    static final String AZUL = "\u001B[34m";
+    static final String RESET = "\u001B[0m";
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        final String ROJO = "\u001B[31m";
-        final String VERDE = "\u001B[32m";
-        final String AZUL = "\u001B[34m";
-        final String RESET = "\u001B[0m";
-
-        System.out.println("=====================================");
-        System.out.println(AZUL + "  Programa: Cálculo de Estadísticas         ");
-        System.out.println("           y Probabilidades                 " + RESET);
-        System.out.println("=====================================\n");
+        // --- Banner de bienvenida ---
+        System.out.println(AZUL + "==============================================" + RESET);
+        System.out.println(AZUL + " BIENVENIDO A LA CALCULADORA ESTADÍSTICA" + RESET);
+        System.out.println(AZUL + "==============================================" + RESET);
+        System.out.println("Una herramienta para facilitar cálculos de estadística y probabilidad.");
 
         while (true) {
-            System.out.println("\nSeleccione el tipo de cálculo a realizar:");
-            System.out.println("1. Cálculo de estadísticas");
-            System.out.println("2. Cálculo de probabilidad");
-            System.out.println("3. Salir del programa");
-            System.out.print("Seleccione una opción (1, 2 o 3): ");
-            String tipoInput = scanner.nextLine().trim();
+            System.out.println("\n--- " + VERDE + "Menú Principal" + RESET + " ---");
+            System.out.println("¿Qué deseas hacer?");
+            System.out.println("1. Realizar cálculos de" + AZUL + " Estadística Descriptiva" + RESET + " (media, varianza, etc.).");
+            System.out.println("2. Realizar cálculos de" + AZUL + " Probabilidad" + RESET + " (Binomial, Poisson, etc.).");
+            System.out.println("3. " + ROJO + "Salir" + RESET + " del programa.");
+            System.out.print("Selecciona una opción (1, 2 o 3): ");
+            String input = scanner.nextLine().trim();
 
-            switch (tipoInput) {
+            switch (input) {
                 case "1":
                     Estadisticas.menuEstadistica();
                     break;
-
                 case "2":
-                    seleccionarProbabilidad(scanner);
+                    // Llama al menú de probabilidades.
+                    mostrarMenuProbabilidad(scanner);
                     break;
-
                 case "3":
-                    System.out.println(VERDE + "Gracias por usar el programa. ¡Hasta luego!" + RESET);
-                    return;
-
+                    System.out.println(VERDE + "\n¡Gracias por usar la calculadora! Hasta pronto." + RESET);
+                    return; // Termina el programa
                 default:
-                    System.out.println(ROJO + "Ingrese una opción válida (1, 2 o 3)" + RESET);
+                    System.out.println(ROJO + "Opción no válida. Por favor, ingresa 1, 2 o 3." + RESET);
             }
         }
     }
 
-    public static void seleccionarProbabilidad(Scanner scanner) {
-        final String ROJO = "\u001B[31m";
-        final String VERDE = "\u001B[32m";
-        final String AZUL = "\u001B[34m";
-        final String RESET = "\u001B[0m";
-
-        boolean seguirEnProbabilidad = true;
-
-        while (seguirEnProbabilidad) {
-            System.out.println("\n¿Qué tipo de distribución desea utilizar?");
-            System.out.println("1. Distribución discreta (Binomial, Poisson o Hipergeométrica) ");
-            System.out.println("2. Distribución continua (Gaussiana)");
-            System.out.println("3. Volver al menú principal");
-            System.out.print("Opción: ");
-            String opcionTipo = scanner.nextLine().trim();
-
-            if (opcionTipo.equals("1")) {
-                boolean seguirEnDiscretos = true;
-                while (seguirEnDiscretos) {
-                    System.out.println("\nSeleccione la distribución discreta:");
-                    System.out.println("1. Distribución Binomial");
-                    System.out.println("2. Distribución de Poisson");
-                    System.out.println("3. Distribución Hipergeométrica");
-                    System.out.println("4. Volver al paso anterior");
-                    System.out.print("Opción: ");
-                    String distribucion = scanner.nextLine().trim();
-
-                    switch (distribucion) {
-                        case "1":
-                            repetirCalculo(scanner, "binomial");
-                            break;
-                        case "2":
-                            repetirCalculo(scanner, "poisson");
-                            break;
-                        case "3":
-                            repetirCalculo(scanner, "hipergeometrica");
-                            break;
-                        case "4":
-                            seguirEnDiscretos = false;
-                            break;
-                        default:
-                            System.out.println(ROJO + "Opción inválida. Ingrese 1 a 4." + RESET);
-                    }
-                }
-            } else if (opcionTipo.equals("2")) {
-                boolean seguirEnContinuos = true;
-                while (seguirEnContinuos) {
-                    System.out.println("\nSeleccione la distribución continua:");
-                    System.out.println("1. Distribución Normal");
-                    System.out.println("2. Volver al paso anterior");
-                    System.out.print("Opción: ");
-                    String opcionContinua = scanner.nextLine().trim();
-
-                    switch (opcionContinua) {
-                        case "1":
-                            repetirCalculo(scanner, "normal");
-                            break;
-                        case "2":
-                            seguirEnContinuos = false;
-                            break;
-                        default:
-                            System.out.println(ROJO + "Opción inválida. Ingrese 1 o 2." + RESET);
-                    }
-                }
-            } else if (opcionTipo.equals("3")) {
-                seguirEnProbabilidad = false;
-            } else {
-                System.out.println(ROJO + "Opción inválida. Ingrese 1, 2 o 3." + RESET);
-            }
-        }
-    }
-
-    public static void repetirCalculo(Scanner scanner, String tipo) {
-        final String VERDE = "\u001B[32m";
-        final String RESET = "\u001B[0m";
-
+    /**
+     * Muestra un menú APLANADO y descriptivo para las distribuciones de probabilidad.
+     * Esto reemplaza la necesidad de anidar menús de "discreta" y "continua".
+     */
+    public static void mostrarMenuProbabilidad(Scanner scanner) {
         while (true) {
-            switch (tipo) {
-                case "binomial":
+            System.out.println("\n--- " + VERDE + "Menú de Probabilidades" + RESET + " ---");
+            System.out.println("Selecciona la distribución que se ajuste a tu problema:");
+            System.out.println(AZUL + "1. Binomial:" + RESET + "          Para N repeticiones de un experimento con dos resultados (éxito/fracaso).");
+            System.out.println(AZUL + "2. Poisson:" + RESET + "           Para la probabilidad de que ocurra un N° de eventos en un intervalo.");
+            System.out.println(AZUL + "3. Hipergeométrica:" + RESET + "   Para extracciones de una muestra SIN devolver los elementos.");
+            System.out.println(AZUL + "4. Normal (Gaussiana):" + RESET + "  Para variables continuas con datos agrupados en torno a una media.");
+            System.out.println("5. " + ROJO + "Volver" + RESET + " al menú principal.");
+            System.out.print("Elige una opción (1-5): ");
+            String opcion = scanner.nextLine().trim();
+
+            switch (opcion) {
+                case "1":
+                    repetirCalculo(scanner, "Binomial");
+                    break;
+                case "2":
+                    repetirCalculo(scanner, "Poisson");
+                    break;
+                case "3":
+                    repetirCalculo(scanner, "Hipergeométrica");
+                    break;
+                case "4":
+                    repetirCalculo(scanner, "Normal (Gaussiana)");
+                    break;
+                case "5":
+                    return; // Sale de este menú y vuelve al principal
+                default:
+                    System.out.println(ROJO + "Opción no válida. Por favor, ingresa un número del 1 al 5." + RESET);
+            }
+        }
+    }
+
+    // Ejecuta el cálculo para la distribución seleccionada y pregunta si se desea repetir.
+
+    public static void repetirCalculo(Scanner scanner, String tipoDistribucion) {
+        while (true) {
+            // Llama al método de cálculo correspondiente
+            switch (tipoDistribucion) {
+                case "Binomial":
                     Binomial.distribucionBinomial();
                     break;
-                case "poisson":
+                case "Poisson":
                     Poisson.distribucionPoisson();
                     break;
-                case "hipergeometrica":
+                case "Hipergeométrica":
                     Hipergeometrica.distribucionHipergeometrica();
                     break;
-                case "normal":
+                case "Normal (Gaussiana)":
                     Gaussiana.distribucionNormal();
                     break;
             }
 
-            System.out.print(VERDE + "\n¿Desea realizar otro cálculo con la misma distribución? (s/n): " + RESET);
+            System.out.printf(VERDE + "\n¿Deseas realizar otro cálculo con la distribución %s? (s/n): " + RESET, tipoDistribucion);
             String respuesta = scanner.nextLine().trim().toLowerCase();
             if (!respuesta.equals("s")) {
-                break;
+                break; // Sale del bucle de repetición y vuelve al menú de probabilidades
             }
         }
     }

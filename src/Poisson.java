@@ -13,89 +13,89 @@ public class Poisson {
     public static void distribucionPoisson() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Usted eligió trabajar con la" + AZUL + " distribución de Poisson.\n" + RESET +
-                "Esta distribución se usa para modelar la cantidad de eventos que ocurren en un intervalo fijo de tiempo o espacio,\n" +
-                "siempre que ocurran de forma independiente y a una tasa constante.");
+        // --- MENSAJE INICIAL ---
+        System.out.println("--- " + AZUL + "Cálculo de Probabilidad de Poisson" + RESET + " ---\n" +
+                "Esta herramienta calcula la probabilidad de que un evento ocurra un número determinado de veces en un intervalo.\n" +
+                "Se usa cuando los eventos son independientes y ocurren a un ritmo promedio constante.\n" +
+                "(Ej: N° de llamadas a un call center en una hora)");
 
         double lambda;
         while (true) {
             try {
-                System.out.print("\nIngrese el valor esperado de ocurrencias (λ > 0): ");
+                System.out.print("\n1. Introduce el número" + VERDE + " promedio " + RESET + "de veces que ocurre el evento en el intervalo (λ > 0): ");
                 lambda = Double.parseDouble(scanner.nextLine().trim());
                 if (lambda > 0) break;
-                else System.out.println(ROJO + "λ debe ser mayor que cero." + RESET);
+                else {
+                    System.out.println(ROJO + "El promedio de ocurrencias (λ) debe ser un número positivo." + RESET);
+                }
             } catch (NumberFormatException e) {
-                System.out.println(ROJO + "Entrada inválida. Intente con un número válido." + RESET);
+                System.out.println(ROJO + "Entrada inválida. Por favor, introduce un número." + RESET);
             }
         }
 
-        System.out.println(AZUL + "\nλ representa tanto la esperanza matemática como la varianza de la distribución." + RESET);
-        System.out.printf("→ Esperanza (E[X]) = %.2f\n→ Varianza (Var[X]) = %.2f\n", lambda, lambda);
+        System.out.println(AZUL + "\n--- Datos Clave de la Distribución ---" + RESET);
+        System.out.println("Una propiedad de Poisson es que la " + VERDE + "media (esperanza) y la varianza son iguales" + RESET + " al promedio ingresado.");
+        System.out.printf("→ Valor Esperado E[X] = %.4f\n→ Varianza Var[X] = %.4f\n", lambda, lambda);
 
-        System.out.println("\nSeleccione el tipo de cálculo:");
-        System.out.println("1. P(X = x) → Probabilidad exacta");
-        System.out.println("2. P(X ≤ x) → Probabilidad acumulada hasta x");
-        System.out.println("3. P(X ≥ x) → Probabilidad desde x");
-        System.out.println("4. P(a ≤ X ≤ b) → Probabilidad en un rango");
-        System.out.print("Opción: ");
+
+        // --- MENÚ DE OPCIONES ---
+        System.out.println("\n2. Selecciona el tipo de cálculo a realizar:");
+        System.out.println("   1. Probabilidad de un número" + VERDE + " exacto " + RESET + "de eventos, tal que P(X = x).");
+        System.out.println("   2. Probabilidad de que ocurran" + VERDE + " como máximo " + RESET + "ciertos eventos, tal que P(X ≤ x) ('a lo sumo...').");
+        System.out.println("   3. Probabilidad de que ocurran" + VERDE + " como mínimo " + RESET + "ciertos eventos, tal que P(X ≥ x) ('por lo menos...').");
+        System.out.println("   4. Probabilidad de que ocurran" + VERDE + " dentro de un rango " + RESET + "de eventos, tal que P(a ≤ X ≤ b).");
+        System.out.print("Elige una opción (1-4): ");
         String opcion = scanner.nextLine().trim();
 
+        System.out.println();
+
+        // --- LÓGICA DE CÁLCULO ---
         switch (opcion) {
             case "1" -> {
-                int x = pedirX(scanner);
+                int x = pedirValor("el número exacto de eventos a evaluar", scanner);
                 double p = probabilidadPoisson(lambda, x);
-                System.out.printf(AZUL + "\nLa probabilidad de que ocurran exactamente %d eventos es: %.10f\n" + RESET, x, p);
+                System.out.println("\n--- " + AZUL + "Resultado" + RESET + " ---");
+                System.out.printf(AZUL + "La probabilidad de que ocurran %sexactamente %d%s eventos es: %.10f\n" + RESET, VERDE, x, AZUL, p);
             }
             case "2" -> {
-                int x = pedirX(scanner);
+                int x = pedirValor("el número máximo de eventos a evaluar", scanner);
                 double acumulada = 0;
                 for (int i = 0; i <= x; i++) acumulada += probabilidadPoisson(lambda, i);
-                System.out.printf(AZUL + "\nLa probabilidad de que ocurran hasta %d eventos (P(X ≤ %d)) es: %.10f\n" + RESET, x, x, acumulada);
+                System.out.println("\n--- " + AZUL + "Resultado" + RESET + " ---");
+                System.out.printf(AZUL + "La probabilidad de que ocurran %scomo máximo %d%s eventos (P(X ≤ %d)) es: %.10f\n" + RESET, VERDE, x, AZUL, x, acumulada);
             }
             case "3" -> {
-                int x = pedirX(scanner);
-                double acumulada = 0;
-                for (int i = 0; i < x; i++) acumulada += probabilidadPoisson(lambda, i);
-                System.out.printf(AZUL + "\nLa probabilidad de que ocurran %d o más eventos (P(X ≥ %d)) es: %.10f\n" + RESET, x, x, 1 - acumulada);
+                int x = pedirValor("el número mínimo de eventos a evaluar", scanner);
+                // La probabilidad de P(X ≥ x) es 1 - P(X < x), que es 1 - P(X ≤ x-1)
+                double acumuladaMenores = 0;
+                for (int i = 0; i < x; i++) acumuladaMenores += probabilidadPoisson(lambda, i);
+                System.out.println("\n--- " + AZUL + "Resultado" + RESET + " ---");
+                System.out.printf(AZUL + "La probabilidad de que ocurran %scomo mínimo %d%s eventos (P(X ≥ %d)) es: %.10f\n" + RESET, VERDE, x, AZUL, x, 1 - acumuladaMenores);
             }
             case "4" -> {
-                int a = pedirLimite("mínimo", scanner);
-                int b = pedirLimite("máximo", scanner);
-                if (a > b) {
-                    int temp = a;
-                    a = b;
-                    b = temp;
+                int a = pedirValor("el valor mínimo del rango (a)", scanner);
+                int b = pedirValor("el valor máximo del rango (b)", scanner);
+                if (a > b) { // Asegura que el rango sea válido
+                    int temp = a; a = b; b = temp;
                 }
                 double total = 0;
                 for (int i = a; i <= b; i++) total += probabilidadPoisson(lambda, i);
-                System.out.printf(AZUL + "\nLa probabilidad de que ocurran entre %d y %d eventos (P(%d ≤ X ≤ %d)) es: %.10f\n" + RESET, a, b, a, b, total);
+                System.out.println("\n--- " + AZUL + "Resultado" + RESET + " ---");
+                System.out.printf(AZUL + "La probabilidad de que ocurran %sentre %d y %d%s eventos (P(%d ≤ X ≤ %d)) es: %.10f\n" + RESET, VERDE, a, b, AZUL, a, b, total);
             }
-            default -> System.out.println(ROJO + "Opción inválida." + RESET);
+            default -> System.out.println(ROJO + "Opción no válida. Por favor, ejecuta de nuevo y elige un número del 1 al 4." + RESET);
         }
     }
 
-    public static int pedirX(Scanner scanner) {
+    public static int pedirValor(String descripcion, Scanner scanner) {
         while (true) {
             try {
-                System.out.print("Ingrese la cantidad esperada de eventos (x ≥ 0): ");
+                System.out.printf("   ↳ Ingresa %s (x ≥ 0): ", descripcion);
                 int x = Integer.parseInt(scanner.nextLine().trim());
                 if (x >= 0) return x;
-                else System.out.println(ROJO + "x debe ser mayor o igual a 0." + RESET);
+                else System.out.println(ROJO + "El número de eventos no puede ser negativo. Inténtalo de nuevo." + RESET);
             } catch (NumberFormatException e) {
-                System.out.println(ROJO + "Entrada inválida. Debe ser un número entero." + RESET);
-            }
-        }
-    }
-
-    public static int pedirLimite(String nombre, Scanner scanner) {
-        while (true) {
-            try {
-                System.out.printf("Ingrese el valor %s del rango (entero ≥ 0): ", nombre);
-                int x = Integer.parseInt(scanner.nextLine().trim());
-                if (x >= 0) return x;
-                else System.out.println(ROJO + "Debe ingresar un número entero mayor o igual a cero." + RESET);
-            } catch (NumberFormatException e) {
-                System.out.println(ROJO + "Entrada inválida." + RESET);
+                System.out.println(ROJO + "Entrada inválida. Debes introducir un número entero." + RESET);
             }
         }
     }
@@ -123,6 +123,9 @@ public class Poisson {
     }
 
     public static BigInteger factorial(int num) {
+        if (num < 0) { // Manejo de factorial de negativos
+            throw new IllegalArgumentException("El factorial no está definido para números negativos.");
+        }
         BigInteger resultado = BigInteger.ONE;
         for (int i = 2; i <= num; i++) {
             resultado = resultado.multiply(BigInteger.valueOf(i));
@@ -130,4 +133,3 @@ public class Poisson {
         return resultado;
     }
 }
-
